@@ -1,0 +1,8 @@
+TOKEN = ''
+GROUP_ID =
+
+
+DB_CONFIG = dict()
+MEM_MINIMUM_QUANTITY =
+
+USER_NONE_ANSWER = ''
