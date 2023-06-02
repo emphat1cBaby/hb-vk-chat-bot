@@ -20,12 +20,12 @@ class UserBot(db.Entity):
 
 class TikTok(db.Entity):
     link = Required(str)
-    is_active = Required(bool)
+    is_active = Required(bool, sql_default=True)
 
 
 class Greeting(db.Entity):
     text = Required(str)
-    is_active = Required(bool)
+    is_active = Required(bool, sql_default=True)
 
 
 db.generate_mapping(create_tables=True)
