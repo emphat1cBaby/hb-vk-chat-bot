@@ -16,9 +16,10 @@ To install and run the Report automation application, follow these steps:
 1. **Clone repository**: git clone https://github.com/emphat1cBaby/hb-vk-chat-bot.git
 2. **Go to the project directory**: cd hb-vk-chat-bot
 3. **Install dependencies**: pip install -r requirement.txt
-4. **Create your own config.py file** from config.py.default
-5. **Migrate models**
-6. **Put the bot on the server**
+4. **Create a VK community, enable the ability to connect a bot and generate a key**
+5. **Create your own config.py file from config.py.default**
+6. **Migrate models**
+7. **Deploy bot on server**
 
 
 ## Usage
