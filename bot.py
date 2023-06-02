@@ -13,7 +13,7 @@ except Exception:
     TOKEN = str(os.environ.get('TOKEN'))
     GROUP_ID = int(os.environ.get('GROUP_ID'))
     MEM_MINIMUM_QUANTITY = 5
-    USER_NONE_ANSWER = "Hwo are you?"
+    USER_NONE_ANSWER = "Who are you?"
 
 
 GLOBAL_PREFIXES = ('/', '!', '', '@ulyana ')
