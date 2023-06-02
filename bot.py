@@ -12,9 +12,6 @@ try:
 except Exception:
     TOKEN = str(os.environ.get('TOKEN'))
     GROUP_ID = int(os.environ.get('GROUP_ID'))
-    MEM_MINIMUM_QUANTITY = 5
-    USER_NONE_ANSWER = "Hwo are you?"
-
 
 GLOBAL_PREFIXES = ('/', '!', '', '@ulyana ')
 
@@ -32,7 +29,7 @@ command_manager = CommandManager()
 @bot.message_handler(bot.command_filter(commands=('h', 'help', 'помощь', 'привет'),
                                         prefixes=GLOBAL_PREFIXES))
 async def help_command(event: SimpleBotEvent) -> str:
-    help_text = await command_manager.get.help(event.user_id)
+    help_text = await command_manager.get.help()
     return help_text
 
 
@@ -49,38 +46,26 @@ async def mem(event: SimpleBotEvent):
     return await command_manager.get.image(event.user_id)
 
 
-@bot.message_handler(bot.command_filter(commands=('tt', 'тт', 'тик-ток', 'tik-tok'),
+@bot.message_handler(bot.command_filter(commands=('ripple', 'рассылка'),
                                         prefixes=GLOBAL_PREFIXES))
-async def get_tt(event: SimpleBotEvent):
-    return await command_manager.get.tt(event.user_id)
+async def ripple(event: SimpleBotEvent):
+    message = await command_manager.ripple(event.text.split()[1:], event.user_id)
+    return message
 
 
-@bot.message_handler(bot.command_filter(commands=('loadtt', 'ttload'),
+@bot.message_handler(bot.command_filter(commands=('greeting', 'поздравление', 'пожелание'),
                                         prefixes=GLOBAL_PREFIXES))
-async def load_tt(event: SimpleBotEvent):
-    text = ' '.join(event.text.split()[1:])
-    answer = await command_manager.add.tt(text, event.user_id)
-
-    return answer
-
-
-@bot.message_handler(bot.command_filter(commands=('loadgreeting', 'greetingload', 'loadgr', 'grload'),
-                                        prefixes=GLOBAL_PREFIXES))
-async def load_tt(event: SimpleBotEvent):
-    text = ' '.join(event.text.split()[1:])
-    answer = await command_manager.add.greeting(text, event.user_id)
-
-    return answer
-
-
-@bot.message_handler(bot.command_filter(commands=('gr', 'greeting', 'пожелание', 'поздравление'),
-                                        prefixes=GLOBAL_PREFIXES))
-async def get_tt(event: SimpleBotEvent):
-    return await command_manager.get.greeting(event.user_id)
+async def load_greeting(event: SimpleBotEvent):
+    if len(event.text.split()) == 1:
+        message = await command_manager.get.greeting(event.user_id)
+    else:
+        message = await command_manager.add.greeting(event.text.split()[1:])
+    return message
 
 
 # run bot
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     loop.create_task(bot.run())
+
     loop.run_forever()
