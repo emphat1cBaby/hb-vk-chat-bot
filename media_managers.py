@@ -1,6 +1,6 @@
 import random
 from pony.orm import db_session, select, commit
-from models import PhotoMem, TikTok, Greeting
+from models import PhotoMem, Greeting, TikTokMovies
 
 
 class MediaManager:
@@ -16,6 +16,7 @@ class ImageManager(MediaManager):
     @db_session
     def get_random_image_from_db(self):
         photos = self.get_free_images_from_db()
+
         return random.choice(photos), len(photos) - 1
 
     @db_session
@@ -44,12 +45,12 @@ class TikTokManager(MediaManager):
 
     @db_session
     def get_free_tt_from_db(self):
-        return list(select(tt for tt in TikTok if tt.is_active))
+        return list(select(tt for tt in TikTokMovies if tt.is_active))
 
     @db_session
     def tt_model_create(self, tt_data):
         if tt_data:
-            return [TikTok(link=tt, is_active=True) for tt in tt_data]
+            return [TikTokMovies(link=tt, is_active=True) for tt in tt_data]
 
     @db_session
     def create_tt_from_db_model(self):
@@ -61,22 +62,18 @@ class TikTokManager(MediaManager):
 
 class GreetingManager(MediaManager):
 
-    @db_session
-    def get_random_greeting_from_db(self):
-        greetings = self.get_free_greeting_from_db()
-        return random.choice(greetings), len(greetings) - 1
-
-    @db_session
-    def get_free_greeting_from_db(self):
-        return list(select(greeting for greeting in Greeting if greeting.is_active))
-
-    @db_session
-    def greeting_model_create(self, text):
+    @staticmethod
+    def add(text: str):
         return Greeting(text=text, is_active=True)
 
-    @db_session
-    def create_greeting_from_db_model(self):
-        greeting, gr_count = self.get_random_greeting_from_db()
-        self.active_false(greeting)
+    def get_random(self):
+        greeting = random.choice(self.get_greetings_list())
 
-        return greeting.text, gr_count
+        self.active_false(greeting.id)
+        return greeting
+
+    @staticmethod
+    def get_greetings_list():
+        with db_session:
+            greetings = select(greeting for greeting in Greeting if greeting.is_active)
+            return list(greetings)
